@@ -27,7 +27,6 @@ export const useUserStore = defineStore('user', {
 
       try {
         await sendPost(AUTH.REGISTER, payload)
-        await this.login({ email: payload.email, password: payload.password })
       } catch (_) {
         alert('boing')
       }
