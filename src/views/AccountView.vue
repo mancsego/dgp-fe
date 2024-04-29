@@ -70,7 +70,7 @@ const isLogin = computed(() => action.value === ACTIONS.LOGIN)
         <!-- Login -->
         <div v-if="isLogin" class="flex flex-col">
           <label for="email">Email:</label>
-          <input type="text" id="email" name="email" v-model="state.email" />
+          <input type="email" id="email" name="email" v-model="state.email" />
           <label for="pwd">Password:</label>
           <input
             :type="showPw ? TYPES.SHOW : TYPES.HIDE"
@@ -87,7 +87,7 @@ const isLogin = computed(() => action.value === ACTIONS.LOGIN)
         <!-- Register -->
         <div v-else class="flex flex-col">
           <label for="email">Email:</label>
-          <input type="text" id="email" name="email" v-model="state.email" />
+          <input type="email" id="email" name="email" v-model="state.email" />
           <label for="first-name">First name:</label>
           <input type="text" id="first-name" name="first-name" v-model="state.firstName" />
           <label for="last-name">Last name:</label>
