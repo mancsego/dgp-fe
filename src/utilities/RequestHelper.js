@@ -22,6 +22,8 @@ const sendDelete = async (url, data) => {
 
 const _unwrap = async (response) => {
   if (response.ok) return await response.json()
+
+  throw new Error('API error')
 }
 
 const _getHeaders = async () => {
@@ -45,7 +47,6 @@ const _getDependencies = async () => {
   cache = {
     user: useUserStore()
   }
-  console.log(cache)
 
   return cache
 }
