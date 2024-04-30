@@ -24,11 +24,12 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     checkToken() {
-      const data = JSON.parse(sessionStorage.getItem(TOKEN))
+      const { value, expiresIn } = JSON.parse(sessionStorage.getItem(TOKEN)) ?? {}
 
-      if (Date.now() < Date.now() + (data?.expiresIn ?? 0)) {
-        _invalidateIfExpires(data.expiresIn)
-        return data
+      if (Date.now() < Date.now() + (expiresIn ?? 0)) {
+        this.token = { value, expiresIn }
+        _invalidateIfExpires(expiresIn)
+        return { token: value, expiresIn }
       }
 
       _removeToken()
@@ -49,6 +50,7 @@ export const useUserStore = defineStore('user', {
       try {
         const { token: value, expiresIn } =
           this.checkToken() ?? (await sendPost(AUTH.LOGIN, { email, password }))
+        console.log(value)
 
         _invalidateIfExpires(expiresIn)
         const data = { value, expiresIn }

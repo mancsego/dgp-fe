@@ -36,7 +36,7 @@ const _getHeaders = async () => {
     }
   return {
     'Content-Type': 'application/json',
-    Authorization: `Beader ${token}`
+    Authorization: `Bearer ${token}`
   }
 }
 
