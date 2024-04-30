@@ -42,7 +42,6 @@ const login = async (payload) => {
 
 const register = async (payload) => {
   await user.register(payload)
-  await login({ email: payload.email, password: payload.password })
 }
 
 const logout = () => {

@@ -49,6 +49,7 @@ export const useUserStore = defineStore('user', {
 
       try {
         await sendPost(AUTH.REGISTER, payload)
+        await this.login({ email: payload.email, password: payload.password })
       } catch ({ message }) {
         this.errors.register = message
       }
