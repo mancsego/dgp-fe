@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 let cache
 export const useGroupsStore = defineStore('groups', {
   state: () => ({
+    loading: false,
     groups: [],
     page: {
       size: 0,
@@ -13,19 +14,26 @@ export const useGroupsStore = defineStore('groups', {
   }),
   getters: {
     getGroups: ({ groups }) => groups,
-    getPageInfo: ({ page }) => page
+    getPageInfo: ({ page }) => page,
+    isLoading: ({ loading }) => loading
   },
   actions: {
-    async fetchGroups() {
+    async fetchGroups(pageToFetch) {
+      this.loading = true
+
       const { sendGet, GROUPS } = await _getDependencies()
 
       const {
         _embedded: { groups },
         page
-      } = await sendGet(GROUPS.BASE)
+      } = await sendGet(GROUPS.BASE + `?page=${pageToFetch}`)
 
       this.groups = groups
       this.page = page
+
+      setTimeout(() => {
+        this.loading = false
+      }, 500)
     }
   }
 })

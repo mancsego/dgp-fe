@@ -1,11 +1,16 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { onBeforeMount, reactive } from 'vue'
+import { defineAsyncComponent, onBeforeMount, reactive } from 'vue'
+
+const LoadingAnimation = defineAsyncComponent(
+  () => import('@/components/atoms/LoadingAnimation.vue')
+)
 
 let cache
 
 const route = useRoute()
 const group = reactive({
+  isLoading: true,
   name: '',
   isBudget: false,
   createdAt: '',
@@ -32,12 +37,17 @@ onBeforeMount(async () => {
   group.isBudget = isBudget
   group.createdAt = new Date(createdAt).toDateString()
   group.updatedAt = new Date(updatedAt).toDateString()
+
+  setTimeout(() => {
+    group.isLoading = false
+  }, 500)
 })
 </script>
 
 <template>
   <div class="flex justify-center">
-    <div class="card flex flex-col items-center w-2/5 *:w-full">
+    <LoadingAnimation v-if="group.isLoading" />
+    <div class="card flex flex-col items-center w-2/5 *:w-full" v-else>
       <div>
         <h1>Group name</h1>
         <span>{{ group.name }}</span>
