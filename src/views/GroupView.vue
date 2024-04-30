@@ -1,28 +1,64 @@
 <script setup>
-const date = new Date()
-const group = {
-  name: `Group falafel`,
-  isBudget: true,
-  createdAt: date.toLocaleString('de-DE', { timeZone: 'UTC' }),
-  updatedAt: date.toLocaleString('de-DE', { timeZone: 'UTC' }),
-  _links: {
-    group: {
-      href: `http://localhost:8080/groups/1`
-    }
-  }
+import { useRoute } from 'vue-router'
+import { onBeforeMount, reactive } from 'vue'
+
+let cache
+
+const route = useRoute()
+const group = reactive({
+  name: '',
+  isBudget: false,
+  createdAt: '',
+  updatedAt: ''
+})
+const _getDependecies = async () => {
+  if (cache) return cache
+
+  const [{ sendGet }, { GROUPS }] = await Promise.all([
+    await import('@/utilities/RequestHelper'),
+    await import('@/utilities/UrlCollection')
+  ])
+
+  cache = { sendGet, GROUPS }
+  return cache
 }
+
+onBeforeMount(async () => {
+  const { sendGet, GROUPS } = await _getDependecies()
+  const { name, isBudget, createdAt, updatedAt } = await sendGet(
+    GROUPS.BASE + `/${route.params.id}`
+  )
+  group.name = name
+  group.isBudget = isBudget
+  group.createdAt = new Date(createdAt).toDateString()
+  group.updatedAt = new Date(updatedAt).toDateString()
+})
 </script>
 
 <template>
   <div class="flex justify-center">
-    <div class="flex flex-col items-center w-2/5 *:w-full">
-      <h1>{{ group.name }}</h1>
-      <h2>{{ group.isBudget }}</h2>
-      <div class="flex justify-between">
-        <div>{{ group.createdAt }}</div>
-        <div>{{ group.updatedAt }}</div>
+    <div class="card flex flex-col items-center w-2/5 *:w-full">
+      <div>
+        <h1>Group name</h1>
+        <span>{{ group.name }}</span>
+      </div>
+      <div>
+        <h2>Is a budget list?</h2>
+        <span>{{ group.isBudget ? 'Yes' : 'No' }}</span>
+      </div>
+      <div>
+        <h3>Created at</h3>
+        <span>{{ group.createdAt }}</span>
+      </div>
+      <div>
+        <h3>Last modified</h3>
+        <span>{{ group.updatedAt }}</span>
       </div>
     </div>
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+.card > div {
+  @apply flex justify-between px-5;
+}
+</style>
