@@ -10,7 +10,7 @@ const USER = {
 }
 
 const GROUPS = {
-  BASE: ROOT + 'groups/'
+  BASE: ROOT + '/groups'
 }
 
 export { AUTH, USER, GROUPS }

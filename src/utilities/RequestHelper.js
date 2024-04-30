@@ -21,9 +21,15 @@ const sendDelete = async (url, data) => {
 }
 
 const _unwrap = async (response) => {
-  if (response.ok) return await response.json()
+  let data
+  try {
+    data = await response.json()
+  } catch (_) {
+    throw new Error('Malformed respoinse')
+  }
+  if (response.ok) return data
 
-  throw new Error('API error')
+  throw new Error(data.description ?? 'Uknown error')
 }
 
 const _getHeaders = async () => {
@@ -36,7 +42,7 @@ const _getHeaders = async () => {
     }
   return {
     'Content-Type': 'application/json',
-    Authorization: `Beader ${token}`
+    Authorization: `Bearer ${token}`
   }
 }
 
