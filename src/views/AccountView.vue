@@ -1,7 +1,7 @@
 <script setup>
 import router from '@/router'
 import { useUserStore } from '@/stores/user'
-import { computed, reactive, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import TheLogin from '@/components/molecules/TheLogin.vue'
 import TheRegister from '@/components/molecules/TheRegister.vue'
