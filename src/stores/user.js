@@ -7,6 +7,10 @@ let cleanUp
 
 export const useUserStore = defineStore('user', {
   state: () => ({
+    errors: {
+      register: '',
+      login: ''
+    },
     profile: {
       firstName: '',
       lastName: '',
@@ -18,6 +22,7 @@ export const useUserStore = defineStore('user', {
     }
   }),
   getters: {
+    getErrors: ({ errors }) => errors,
     getProfile: ({ profile }) => profile,
     getToken: ({ token: { value } }) => value,
     isLoggedIn: ({ token: { value } }) => sessionStorage.getItem(TOKEN) ?? value ?? null
@@ -39,15 +44,17 @@ export const useUserStore = defineStore('user', {
       return null
     },
     async register(payload) {
+      this.errors.register = ''
       const { AUTH, sendPost } = await _getDependencies()
 
       try {
         await sendPost(AUTH.REGISTER, payload)
-      } catch (_) {
-        alert('boing')
+      } catch ({ message }) {
+        this.errors.register = message
       }
     },
     async login({ email, password }) {
+      this.errors.login = ''
       const { AUTH, sendPost, router } = await _getDependencies()
 
       try {
@@ -61,9 +68,9 @@ export const useUserStore = defineStore('user', {
         await this.fetchProfile()
 
         router.push({ path: '/' })
-      } catch (e) {
-        alert('Boing')
-        console.error(e)
+      } catch ({ message }) {
+        this.errors.login = message
+
         await this.logout()
       }
     },

@@ -61,7 +61,7 @@ const passwordType = computed(() => (showPw.value ? TYPES.SHOW : TYPES.HIDE))
         {{ isLogin ? ACTIONS.REGISTER : ACTIONS.LOGIN }}
       </button>
     </div>
-    <div class="flex justify-center items-end">
+    <div class="flex flex-col justify-end items-center">
       <TheProfileView class="card" v-if="user.isLoggedIn" @dispatch="logout" />
       <TheLogin
         class="card"
@@ -77,6 +77,9 @@ const passwordType = computed(() => (showPw.value ? TYPES.SHOW : TYPES.HIDE))
         @toggle="toggle"
         :password-type="passwordType"
       />
+      <span role="alert" v-if="!user.isLoggedIn">
+        {{ isLogin ? user.getErrors.login : user.getErrors.register }}
+      </span>
     </div>
   </div>
 </template>
