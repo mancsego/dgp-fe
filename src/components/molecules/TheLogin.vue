@@ -14,7 +14,7 @@ const state = reactive({
 })
 
 const schema = yup.object({
-  email: yup.string().email().required(MESSAGES.REQUIRED),
+  email: yup.string().email(MESSAGES.EMAIL).required(MESSAGES.REQUIRED),
   pwd: yup.string().required(MESSAGES.REQUIRED).min(8, MESSAGES.MIN)
 })
 

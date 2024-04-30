@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 const TOKEN = 'token'
 
 let cache
+let cleanUp
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -13,7 +14,7 @@ export const useUserStore = defineStore('user', {
     },
     token: {
       value: null,
-      expires: 0
+      expiresIn: 0
     }
   }),
   getters: {
@@ -22,6 +23,17 @@ export const useUserStore = defineStore('user', {
     isLoggedIn: () => sessionStorage.getItem(TOKEN) ?? null
   },
   actions: {
+    checkToken() {
+      const data = JSON.parse(sessionStorage.getItem(TOKEN))
+
+      if (Date.now() < Date.now() + (data?.expiresIn ?? 0)) {
+        _invalidateIfExpires(data.expiresIn)
+        return data
+      }
+
+      _removeToken()
+      return null
+    },
     async register(payload) {
       const { AUTH, sendPost } = await _getDependencies()
 
@@ -35,10 +47,13 @@ export const useUserStore = defineStore('user', {
       const { AUTH, sendPost } = await _getDependencies()
 
       try {
-        const data = _getTokenFromSession() ?? (await sendPost(AUTH.LOGIN, { email, password }))
-        const token = { value: data.token, expires: Date.now() + data.expiresIn }
-        this.token = token
-        sessionStorage.setItem(TOKEN, JSON.stringify(token))
+        const { token: value, expiresIn } =
+          this.checkToken() ?? (await sendPost(AUTH.LOGIN, { email, password }))
+
+        _invalidateIfExpires(expiresIn)
+        const data = { value, expiresIn }
+        this.token = data
+        sessionStorage.setItem(TOKEN, JSON.stringify(data))
       } catch (e) {
         alert('Boing')
         console.error(e)
@@ -46,7 +61,7 @@ export const useUserStore = defineStore('user', {
       }
     },
     logout() {
-      sessionStorage.removeItem(TOKEN)
+      _removeToken()
     },
     async fetchProfile() {
       const { USER, sendGet } = await _getDependencies()
@@ -56,13 +71,13 @@ export const useUserStore = defineStore('user', {
   }
 })
 
-const _getTokenFromSession = () => {
-  const data = JSON.parse(sessionStorage.getItem(TOKEN))
+const _invalidateIfExpires = (expiresIn) => {
+  clearTimeout(cleanUp)
+  cleanUp = setTimeout(_removeToken, expiresIn)
+}
 
-  if (Date.now() > data?.expires ?? 0) return data
-
-  localStorage.removeItem(TOKEN)
-  return null
+const _removeToken = () => {
+  sessionStorage.removeItem(TOKEN)
 }
 
 const _getDependencies = async () => {

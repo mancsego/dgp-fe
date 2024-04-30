@@ -44,4 +44,8 @@ a,
   input {
     @apply m-2 p-1 bg-slate-100 rounded-md;
   }
+
+  span[role='alert'] {
+    @apply text-red-600;
+  }
 }
