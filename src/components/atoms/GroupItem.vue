@@ -17,8 +17,8 @@ const handle = () => {
   <tr class="item" @click="handle">
     <td>{{ props.name }}</td>
     <td>{{ props.isBudget }}</td>
-    <td>{{ props.updatedAt }}</td>
-    <td>{{ props.createdAt }}</td>
+    <td>{{ new Date(props.updatedAt).toDateString() }}</td>
+    <td>{{ new Date(props.createdAt).toDateString() }}</td>
   </tr>
 </template>
 <style scoped>

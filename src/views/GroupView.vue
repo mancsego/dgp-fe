@@ -47,7 +47,7 @@ onBeforeMount(async () => {
 <template>
   <div class="flex justify-center">
     <LoadingAnimation v-if="group.isLoading" />
-    <div class="card flex flex-col items-center w-2/5 *:w-full" v-else>
+    <div class="card flex flex-col items-center w-full mx-1 md:w-2/5 *:w-full" v-else>
       <div>
         <h1>Group name</h1>
         <span>{{ group.name }}</span>
