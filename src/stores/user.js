@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', {
   getters: {
     getProfile: ({ profile }) => profile,
     getToken: ({ token: { value } }) => value,
-    isLoggedIn: () => sessionStorage.getItem(TOKEN) ?? null
+    isLoggedIn: ({ token: { value } }) => sessionStorage.getItem(TOKEN) ?? value ?? null
   },
   actions: {
     checkToken() {
@@ -56,10 +56,11 @@ export const useUserStore = defineStore('user', {
         _invalidateIfExpires(expiresIn)
         const data = { value, expiresIn }
         this.token = data
-        sessionStorage.setItem(TOKEN, JSON.stringify(data))
 
-        void this.fetchProfile()
-        await router.go({ path: '/' })
+        sessionStorage.setItem(TOKEN, JSON.stringify(data))
+        await this.fetchProfile()
+
+        router.push({ path: '/' })
       } catch (e) {
         alert('Boing')
         console.error(e)
@@ -70,7 +71,7 @@ export const useUserStore = defineStore('user', {
       const { router } = await _getDependencies()
       this.token = { value: null, expiresIn: 0 }
       _removeToken()
-      await router.go({ path: '/account' })
+      router.push({ path: '/account' })
     },
     async fetchProfile() {
       const { USER, sendGet } = await _getDependencies()
@@ -95,7 +96,7 @@ const _getDependencies = async () => {
   const [{ sendPost, sendGet }, { AUTH, USER }, { default: router }] = await Promise.all([
     await import('@/utilities/RequestHelper'),
     await import('@/utilities/UrlCollection'),
-    await import('@/router')
+    await import('@/router/index')
   ])
   cache = { sendPost, sendGet, AUTH, USER, router }
   return cache

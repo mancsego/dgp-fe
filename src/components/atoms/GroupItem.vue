@@ -9,7 +9,7 @@ const props = defineProps({
   href: String
 })
 const handle = () => {
-  router.go(props.href.match(/\/groups\/(\d+)/)[0])
+  router.push({ path: props.href.match(/\/groups\/(\d+)/)[0] })
 }
 </script>
 
