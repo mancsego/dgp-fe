@@ -69,6 +69,6 @@ onBeforeMount(async () => {
 </template>
 <style scoped>
 .card > div {
-  @apply flex justify-between px-5;
+  @apply flex justify-between px-5 py-2;
 }
 </style>

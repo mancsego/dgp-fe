@@ -12,11 +12,25 @@ const logout = () => {
 
 <template>
   <div>
-    <div class="flex flex-col">
-      <div>Email: {{ getProfile.email }}</div>
-      <div>First name: {{ getProfile.firstName }}</div>
-      <div>Last name: {{ getProfile.lastName }}</div>
+    <div class="profile flex flex-col">
+      <div>
+        <h1>Email:</h1>
+        <span>{{ getProfile.email }}</span>
+      </div>
+      <div>
+        <h2>First name:</h2>
+        <span>{{ getProfile.firstName }}</span>
+      </div>
+      <div>
+        <h2>Last name:</h2>
+        <span>{{ getProfile.lastName }}</span>
+      </div>
       <button class="btn" @click="logout">Logout</button>
     </div>
   </div>
 </template>
+<style scoped>
+.profile > div {
+  @apply flex justify-between;
+}
+</style>

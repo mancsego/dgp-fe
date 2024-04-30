@@ -65,7 +65,7 @@ const toggle = () => {
         <label for="toggle">Show password</label>
         <input id="toggle" type="checkbox" @click="toggle" />
       </div>
-      <button class="btn">Register</button>
+      <button class="btn btn-primary">Register</button>
     </div>
   </Form>
 </template>
