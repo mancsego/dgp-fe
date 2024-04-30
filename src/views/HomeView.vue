@@ -1,9 +1,9 @@
 <script setup>
-import GroupItem from '@/components/atoms/GroupItem.vue'
 import { useGroupsStore } from '@/stores/groups'
 import { storeToRefs } from 'pinia'
 import { defineAsyncComponent, onBeforeMount } from 'vue'
 
+const GroupItem = defineAsyncComponent(() => import('@/components/atoms/GroupItem.vue'))
 const Pagination = defineAsyncComponent(() => import('@/components/atoms/Pagination.vue'))
 const LoadingAnimation = defineAsyncComponent(
   () => import('@/components/atoms/LoadingAnimation.vue')
