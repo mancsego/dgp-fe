@@ -2,37 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-#app {
-  @apply flex flex-col w-full;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-}
-
 @layer components {
+  body {
+    @apply bg-zinc-50 text-shamrock dark:bg-red-200 text-xs md:text-base;
+  }
+  #app {
+    @apply flex flex-col w-full;
+  }
+
+  a {
+    @apply mx-2 text-shamrock uppercase transition-all ease-in-out tracking-wider;
+  }
+  a:hover {
+    @apply text-green-600 underline;
+  }
+
   .btn {
-    @apply border-2 m-2 py-2 px-1 min-w-36 rounded-md;
+    @apply border-2 m-2 py-2 px-1 min-w-36 font-extralight;
+  }
+  .btn-primary {
+    @apply bg-shamrock text-zinc-50 border border-shamrock;
+  }
+  .btn-primary:hover {
+    @apply bg-zinc-50 text-shamrock border border-shamrock;
+  }
+  .btn-secondary {
+    @apply bg-zinc-50 text-ochre border border-shamrock;
+  }
+  .btn-secondary:hover {
+    @apply bg-ochre text-zinc-50 border border-shamrock;
   }
   .card {
-    @apply flex justify-around items-end bg-white rounded-xl shadow-md border-2 p-4 my-3 w-80;
+    @apply flex justify-around items-end bg-white shadow-md border-2 p-4 my-3 w-80;
     > div {
       @apply w-full;
     }
@@ -41,7 +42,7 @@ a,
   h1,
   h2,
   h3 {
-    @apply font-bold;
+    @apply font-bold text-sage;
   }
 
   h1 {
@@ -57,10 +58,10 @@ a,
     @apply mx-2;
   }
   input {
-    @apply m-2 p-1 bg-slate-100 rounded-md;
+    @apply m-2 px-2 py-1 bg-white outline-none border border-black text-shamrock;
   }
 
   span[role='alert'] {
-    @apply text-red-600;
+    @apply text-ochre;
   }
 }

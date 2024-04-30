@@ -56,7 +56,7 @@ const passwordType = computed(() => (showPw.value ? TYPES.SHOW : TYPES.HIDE))
   <div class="flex flex-col justify-center">
     <div class="flex flex-col items-center" v-if="!user.isLoggedIn">
       <p>{{ isLogin ? "Don't have an account yet?" : 'Already have an account?' }}</p>
-      <button class="btn" @click="changeAction">
+      <button class="btn btn-secondary" @click="changeAction">
         {{ isLogin ? ACTIONS.REGISTER : ACTIONS.LOGIN }}
       </button>
     </div>

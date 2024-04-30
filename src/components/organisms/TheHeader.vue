@@ -10,12 +10,14 @@ const { getProfile, isLoggedIn } = storeToRefs(user)
   <header class="flex justify-between items-center h-20 px-5 md:px-20 mb-5 border-b-2">
     <div>
       <div v-if="isLoggedIn">
-        Welcome <span class="text-green-500">{{ getProfile.firstName }}</span
+        Welcome <span class="font-semibold text-sage">{{ getProfile.firstName }}</span
         >!
       </div>
     </div>
     <div>
-      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/" :class="{ 'line-through text-gray-400 pointer-events-none': !isLoggedIn }"
+        >Home</RouterLink
+      >
       <RouterLink to="/account">Account</RouterLink>
     </div>
   </header>
