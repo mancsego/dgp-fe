@@ -1,25 +1,16 @@
 <script setup>
 import GroupItem from '@/components/atoms/GroupItem.vue'
 import Pagination from '@/components/atoms/Pagination.vue'
+import { useGroupsStore } from '@/stores/groups'
+import { storeToRefs } from 'pinia'
+import { onBeforeMount } from 'vue'
 
-const date = new Date()
-const groups = [...Array(20).keys()].map((i) => ({
-  name: `Group #${++i}`,
-  isBudget: i % 2 === 1,
-  createdAt: date.toLocaleString('de-DE', { timeZone: 'UTC' }),
-  updatedAt: date.toLocaleString('de-DE', { timeZone: 'UTC' }),
-  _links: {
-    group: {
-      href: `http://localhost:8080/groups/${i}`
-    }
-  }
-}))
-const pages = {
-  size: 20,
-  totalElements: 100,
-  totalPages: 5,
-  number: 0
-}
+const store = useGroupsStore()
+const { getGroups: groups, getPageInfo: pages } = storeToRefs(store)
+
+onBeforeMount(() => {
+  store.fetchGroups()
+})
 </script>
 
 <template>
@@ -51,7 +42,7 @@ const pages = {
         />
       </tbody>
     </table>
-    <Pagination :totalPages="pages.totalPages" />
+    <Pagination :totalPages="pages.totalPages" :current="pages.number" />
   </div>
 </template>
 <style scoped></style>
