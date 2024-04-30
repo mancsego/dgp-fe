@@ -10,32 +10,42 @@ This template should help get you started developing with Vue 3 in Vite.
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
+Locally you can use bun / npm to run the application.
+
+Due to missing cert functionality in the bun image, the docker build can only with npm.
+
 ## Project Setup
 
 ```sh
-bun install
+npm / bun install
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-bun dev
+npm / bun dev
+```
+
+## Running in Docker with Hot-Reload for Development
+
+```sh
+docker compose up
 ```
 
 ### Compile and Minify for Production
 
 ```sh
-bun build
+npm / bun build
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-bun test:unit
+npm / bun test:unit
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-bun lint
+npm / bun lint
 ```
