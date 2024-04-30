@@ -50,7 +50,6 @@ export const useUserStore = defineStore('user', {
       try {
         const { token: value, expiresIn } =
           this.checkToken() ?? (await sendPost(AUTH.LOGIN, { email, password }))
-        console.log(value)
 
         _invalidateIfExpires(expiresIn)
         const data = { value, expiresIn }
