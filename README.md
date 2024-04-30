@@ -1,18 +1,10 @@
 # dgp-fe
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Getting started
 
 Locally you can use bun / npm to run the application.
 
-Due to missing cert functionality in the bun image, the docker build can only with npm.
+Due to missing cert functionality in the bun image, the docker build can only work with npm.
 
 ## Project Setup
 
