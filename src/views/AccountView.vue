@@ -1,10 +1,12 @@
 <script setup>
-import router from '@/router'
 import { useUserStore } from '@/stores/user'
-import { computed, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 
-import TheLogin from '@/components/molecules/TheLogin.vue'
-import TheRegister from '@/components/molecules/TheRegister.vue'
+const TheLogin = defineAsyncComponent(() => import('@/components/molecules/TheLogin.vue'))
+const TheRegister = defineAsyncComponent(() => import('@/components/molecules/TheRegister.vue'))
+const TheProfileView = defineAsyncComponent(
+  () => import('@/components/molecules/TheProfileView.vue')
+)
 
 const TYPES = {
   SHOW: 'text',
@@ -36,29 +38,34 @@ const changeAction = () => {
 
 const login = async (payload) => {
   await user.login(payload)
-  await router.push({ path: '/' })
 }
 
 const register = async (payload) => {
   await user.register(payload)
   await login({ email: payload.email, password: payload.password })
 }
+
+const logout = () => {
+  user.logout()
+}
+
 const isLogin = computed(() => action.value === ACTIONS.LOGIN)
 const passwordType = computed(() => (showPw.value ? TYPES.SHOW : TYPES.HIDE))
 </script>
 
 <template>
   <div class="flex flex-col justify-center">
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center" v-if="!user.isLoggedIn">
       <p>{{ isLogin ? "Don't have an account yet?" : 'Already have an account?' }}</p>
       <button class="btn" @click="changeAction">
         {{ isLogin ? ACTIONS.REGISTER : ACTIONS.LOGIN }}
       </button>
     </div>
     <div class="flex justify-center items-end">
+      <TheProfileView class="card" v-if="user.isLoggedIn" @dispatch="logout" />
       <TheLogin
         class="card"
-        v-if="isLogin"
+        v-else-if="isLogin"
         @dispatch="login"
         @toggle="toggle"
         :password-type="passwordType"

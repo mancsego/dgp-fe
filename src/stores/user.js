@@ -28,7 +28,10 @@ export const useUserStore = defineStore('user', {
 
       if (Date.now() < Date.now() + (expiresIn ?? 0)) {
         this.token = { value, expiresIn }
+
         _invalidateIfExpires(expiresIn)
+        void this.fetchProfile()
+
         return { token: value, expiresIn }
       }
 
@@ -45,24 +48,29 @@ export const useUserStore = defineStore('user', {
       }
     },
     async login({ email, password }) {
-      const { AUTH, sendPost } = await _getDependencies()
+      const { AUTH, sendPost, router } = await _getDependencies()
 
       try {
-        const { token: value, expiresIn } =
-          this.checkToken() ?? (await sendPost(AUTH.LOGIN, { email, password }))
+        const { token: value, expiresIn } = await sendPost(AUTH.LOGIN, { email, password })
 
         _invalidateIfExpires(expiresIn)
         const data = { value, expiresIn }
         this.token = data
         sessionStorage.setItem(TOKEN, JSON.stringify(data))
+
+        void this.fetchProfile()
+        await router.go({ path: '/' })
       } catch (e) {
         alert('Boing')
         console.error(e)
         await this.logout()
       }
     },
-    logout() {
+    async logout() {
+      const { router } = await _getDependencies()
+      this.token = { value: null, expiresIn: 0 }
       _removeToken()
+      await router.go({ path: '/account' })
     },
     async fetchProfile() {
       const { USER, sendGet } = await _getDependencies()
@@ -84,10 +92,11 @@ const _removeToken = () => {
 const _getDependencies = async () => {
   if (cache) return cache
 
-  const [{ sendPost, sendGet }, { AUTH, USER }] = await Promise.all([
+  const [{ sendPost, sendGet }, { AUTH, USER }, { default: router }] = await Promise.all([
     await import('@/utilities/RequestHelper'),
-    await import('@/utilities/UrlCollection')
+    await import('@/utilities/UrlCollection'),
+    await import('@/router')
   ])
-  cache = { sendPost, sendGet, AUTH, USER }
+  cache = { sendPost, sendGet, AUTH, USER, router }
   return cache
 }
